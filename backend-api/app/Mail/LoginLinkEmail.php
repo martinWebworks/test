@@ -42,9 +42,9 @@ class LoginLinkEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.index',
             with: [
-                "loginUrl" => $this->loginUrl
+                "magicLink" => $this->loginUrl
             ]
         );
     }
