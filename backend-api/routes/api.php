@@ -23,6 +23,7 @@ Route::prefix('v1')->group(function () {
     Route::controller(UserController::class)->prefix('auth')->group(function () {
 
         Route::post('/login', 'login')->name('login');
+        Route::get('/profile', 'profile')->name('profile');
 
     });
 
