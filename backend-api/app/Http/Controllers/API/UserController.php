@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use App\Mail\LoginLinkEmail;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -26,28 +28,25 @@ class UserController extends Controller
     }
 
 
-
-
     /**
      * Get a JWT via given credentials.
      *
+     * @param LoginRequest $request
      * @return JsonResponse
      */
-    public function login(): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
-        $credentials = request(['email']);
-
-        request()->validate([
-            'email' => 'required|email'
-        ]);
-
 
         $user = User::firstOrCreate(
-            ['email' => $credentials['email']],
-            ['name' => 'Default Name']
+            ['email' => $request->email],
         );
 
-        if (! $token = auth()->attempt($credentials)) {
+        Auth::login($user);
+
+
+        $token = auth()->tokenById($user->id);
+
+        if (!$token) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -89,7 +88,7 @@ class UserController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return JsonResponse
      */
