@@ -41,14 +41,40 @@ class UserController extends Controller
             ['email' => $request->email],
         );
 
-        Auth::login($user);
+        $token = Str::random(60);
+        $user->login_token = $token;
+        $user->login_token_created_at = now();
+        $user->save();
 
+        $link = url('/api/auth/magic-login?token=' . $token);
+
+
+        // Mail::to($user->email)->send(new LoginLinkEmail($link));
+
+
+        return response()->json(['message' => 'Magic link has been sent to your email.']);
+
+    }
+
+    public function magicLinkLogin(Request $request): JsonResponse
+    {
+        $token = $request->input('token');
+        $user = User::where('login_token', $token)->first();
+
+        if (!$user || now()->subMinutes(5)->gt($user->login_token_created_at)) {
+            return response()->json(['error' => 'This magic link is expired. Please request a new one.'], 401);
+        }
+
+        Auth::login($user);
 
         $token = auth()->tokenById($user->id);
 
         if (!$token) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        $user->login_token = null;
+        $user->login_token_created_at = null;
+        $user->save();
 
         return $this->respondWithToken($token);
     }
