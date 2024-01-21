@@ -1,0 +1,1 @@
+generate token : JWT_SECRET=1AQrPWV6jXbvEpFJFgED1lFoKhBi404LbzXWOGC6KwDppEuxEekrsIQlcyrbNMTC
