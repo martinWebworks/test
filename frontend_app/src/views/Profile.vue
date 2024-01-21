@@ -33,6 +33,7 @@
           </div>
           <div class="flex gap-2 px-2 mt-4">
             <button
+                @click="logout"
                 class="flex-1 rounded-full bg-blue-600 dark:bg-blue-800 text-white dark:text-white antialiased font-bold hover:bg-blue-800 dark:hover:bg-blue-900 px-4 py-2">
               Logout
             </button>
@@ -53,6 +54,8 @@
 <script>
 import NavbarComponent from "../components/Navbar.vue";
 import FooterComponent from "../components/Footer.vue";
+import {useAuthStore} from '../store/authStore';
+
 
 
 import userprofile from '../assets/img/default.webp'
@@ -62,6 +65,12 @@ export default {
   components: {
     NavbarComponent,
     FooterComponent
+  },
+  methods: {
+    logout() {
+      const authStore = useAuthStore();
+      authStore.logout();
+    },
   },
 
   data() {
