@@ -2,6 +2,7 @@ import {defineStore} from 'pinia';
 import axios from 'axios';
 import {API_ENDPOINTS} from '../config/apiConfig';
 import router from "../router/index.js";
+import Swal from "sweetalert2";
 
 
 export const useAuthStore = defineStore('auth', {
@@ -15,7 +16,36 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         async login(email) {
             try {
-                const response = await axios.post(API_ENDPOINTS.LOGIN, email);
+                const response = await axios.post(API_ENDPOINTS.LOGIN, {email});
+
+                console.log(response);
+
+                await Swal.fire({
+                    title: 'Success !',
+                    text: response.data.message,
+                    timer: 2000,
+                    icon: "success"
+                });
+
+                console.log(response);
+
+            } catch (error) {
+                console.error(error);
+
+                await Swal.fire({
+                    title: 'Success !',
+                    text: error.data.message,
+                    timer: 2000,
+                    icon: "success"
+                });
+
+            }
+
+        },
+
+        async linkLogin(loginLink) {
+            try {
+                const response = await axios.post(API_ENDPOINTS.LINK_LOGIN, loginLink);
                 this.token = response.data.access_token;
                 localStorage.setItem('token', this.token);
 
@@ -24,6 +54,7 @@ export const useAuthStore = defineStore('auth', {
             } catch (error) {
                 console.error(error);
             }
+
         },
         logout() {
             this.user = null;

@@ -34,7 +34,7 @@ class UserController extends Controller
      * @param LoginRequest $request
      * @return JsonResponse
      */
-    public function login(LoginRequest $request): JsonResponse
+    public function login(Request $request): JsonResponse
     {
 
         $user = User::firstOrCreate(
