@@ -1,4 +1,3 @@
-// store/auth.js
 import {defineStore} from 'pinia';
 import axios from 'axios';
 import {API_ENDPOINTS} from '../config/apiConfig';
@@ -10,15 +9,14 @@ export const useAuthStore = defineStore('auth', {
         token: null,
     }),
     actions: {
-        async login(credentials) {
+        async login(email) {
             try {
-                const response = await axios.post(API_ENDPOINTS.LOGIN, credentials);
+                const response = await axios.post(API_ENDPOINTS.LOGIN, email);
+                console.log(response)
                 this.user = response.data.user;
                 this.token = response.data.token;
-                // You might want to store the token in localStorage
                 localStorage.setItem('token', this.token);
             } catch (error) {
-                // Handle error (invalid credentials, etc.)
                 console.error(error);
             }
         },
