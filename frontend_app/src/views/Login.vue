@@ -17,9 +17,14 @@
           <form class="mt-8 space-y-6" @submit.prevent="login">
             <div>
               <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-              <input type="email" v-model="email" name="email" id="email"
+              <input type="email" v-model="email"
                      class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                     placeholder="email@test.com" required="">
+                     placeholder="email@test.com" required>
+
+            </div>
+            <div v-if="v$.email.$error" class="text-red-600">
+              <span v-if="!v$.email.required">Email is required.</span>
+              <span v-if="!v$.email.email">Please enter a valid email.</span>
             </div>
 
             <button type="submit"
@@ -43,6 +48,8 @@ import FooterComponent from "../components/Footer.vue";
 import logoImg from '../assets/img/logo.svg'
 import {useAuthStore} from "../store/authStore.js";
 import {ref} from "vue";
+import {useVuelidate} from '@vuelidate/core'
+import {required, email} from '@vuelidate/validators'
 
 export default {
 
@@ -52,21 +59,38 @@ export default {
 
     const email = ref('');
 
-    const login = async () => {
-      try {
-        await authStore.login({email: email.value});
+    const rules = {
+      email: {required, email},
+    };
 
-      } catch (error) {
-        console.error(error);
+    const v$ = useVuelidate(rules, {email});
+
+
+    const login = async () => {
+      v$.value.$touch();
+      if (!v$.value.$invalid) {
+        try {
+          await authStore.login({email: email.value});
+
+        } catch (error) {
+          console.error(error);
+        }
       }
     };
 
     return {
       email,
       login,
+      v$
     };
 
 
+  },
+
+  validations() {
+    return {
+      email: {required, email}
+    }
   },
 
   name: "login-page",
