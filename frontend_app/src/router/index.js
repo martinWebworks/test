@@ -8,6 +8,14 @@ const routes = [
     {
         path: "/login",
         component: Login,
+        beforeEnter: (to, from, next) => {
+            const authStore = useAuthStore();
+            if (authStore.isLoggedIn) {
+                next('/profile');
+            } else {
+                next();
+            }
+        }
     },
     {
         path: "/profile",
