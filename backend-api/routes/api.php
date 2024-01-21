@@ -24,6 +24,8 @@ Route::prefix('v1')->group(function () {
 
         Route::post('/login', 'login')->name('login');
         Route::get('/profile', 'profile')->name('profile');
+        Route::post('/refresh', 'refresh')->name('refresh');
+        Route::post('/logout', 'logout')->name('logout');
 
     });
 
