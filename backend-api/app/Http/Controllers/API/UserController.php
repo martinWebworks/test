@@ -46,10 +46,10 @@ class UserController extends Controller
         $user->login_token_created_at = now();
         $user->save();
 
-        $link = url('/api/auth/v1/magic-login?token=' . $token);
+        $link = url('/api/v1/auth/link-login?token=' . $token);
 
 
-        Mail::to($user->email)->send(new LoginLinkEmail($link));
+        // Mail::to($user->email)->send(new LoginLinkEmail($link));
 
 
         return response()->json(['message' => 'Magic link has been sent to your email.', 'login_link' => $link]);
