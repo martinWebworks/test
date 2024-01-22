@@ -1,8 +1,5 @@
 <template>
   <div>
-    <navbar-component></navbar-component>
-
-
     <main class="bg-gray-50 dark:bg-gray-900">
       <div class="flex flex-col items-center justify-center px-6 pt-8 mx-auto md:h-screen pt:mt-0 dark:bg-gray-900">
         <a href="/" class="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
