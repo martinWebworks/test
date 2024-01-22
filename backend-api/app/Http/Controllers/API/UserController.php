@@ -46,7 +46,7 @@ class UserController extends Controller
         $user->login_token_created_at = now();
         $user->save();
 
-        $link = url('/api/v1/auth/link-login?token=' . $token);
+        $link = url('http://localhost:3000/link-login?token=' . $token);
 
 
         // Mail::to($user->email)->send(new LoginLinkEmail($link));
