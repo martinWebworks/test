@@ -36,18 +36,12 @@ class LoginLinkEmail extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
+    public function build()
+
     {
-        return new Content(
-            view: 'view.name',
-            with: [
-                "loginUrl" => $this->loginUrl
-            ]
-        );
+        return $this->markdown('mail.index', ['magicLink' => $this->loginUrl]);
     }
+
 
     /**
      * Get the attachments for the message.

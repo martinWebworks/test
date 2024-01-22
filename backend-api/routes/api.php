@@ -23,6 +23,7 @@ Route::prefix('v1')->group(function () {
     Route::controller(UserController::class)->prefix('auth')->group(function () {
 
         Route::post('/login', 'login')->name('login');
+        Route::get('/link-login', 'magicLinkLogin')->name('link.login');
         Route::get('/profile', 'profile')->name('profile');
         Route::post('/refresh', 'refresh')->name('refresh');
         Route::post('/logout', 'logout')->name('logout');
@@ -30,5 +31,4 @@ Route::prefix('v1')->group(function () {
     });
 
 });
-
 

@@ -1,31 +1,19 @@
 import {createApp} from 'vue'
-import {createWebHistory, createRouter} from "vue-router";
+import {createPinia} from 'pinia'
+import router from './router';
+
 
 import './style.css'
 import App from './App.vue'
 
+const pinia = createPinia();
 
-import Login from './views/Login.vue'
-import Profile from './views/Profile.vue'
-
-
-const routes = [
-    {
-        path: "/login",
-        component: Login,
-    },
-
-    {
-        path: "/profile",
-        component: Profile,
-    },
-    {path: "/:pathMatch(.*)*", redirect: "/login"},
-];
-
-const router = createRouter({
-    history: createWebHistory(),
-    routes,
-});
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 
-createApp(App).use(router).mount('#app')
+createApp(App)
+    .use(router)
+    .use(pinia)
+    .use(VueSweetalert2)
+    .mount('#app')
