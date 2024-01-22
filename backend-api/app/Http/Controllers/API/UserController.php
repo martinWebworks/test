@@ -29,7 +29,7 @@ class UserController extends Controller
 
 
     /**
-     * Get a JWT via given credentials.
+     * Initiate login
      *
      * @param LoginRequest $request
      * @return JsonResponse
@@ -57,7 +57,7 @@ class UserController extends Controller
     }
 
     /**
-     * login with a link
+     * login with a link and get JWT token
      * @param Request $request
      * @return JsonResponse
      */
