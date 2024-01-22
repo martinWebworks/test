@@ -49,7 +49,7 @@ class UserController extends Controller
         $link = url('http://localhost:3000/link-login?token=' . $token);
 
 
-       Mail::to($user->email)->send(new LoginLinkEmail($link));
+        Mail::to($user->email)->send(new LoginLinkEmail($link));
 
 
         return response()->json(['message' => 'Magic link has been sent to your email.', 'login_link' => $link]);
