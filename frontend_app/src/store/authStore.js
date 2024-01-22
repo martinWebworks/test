@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import axios from 'axios';
-import {API_ENDPOINTS} from '../config/apiConfig';
+import {API_ENDPOINTS as PI_ENDPOINTS, API_ENDPOINTS} from '../config/apiConfig';
 import router from "../router/index.js";
 import Swal from "sweetalert2";
 
@@ -22,6 +22,7 @@ export const useAuthStore = defineStore('auth', {
                         'Accept': 'application/json',
                     }
                 });
+                console.log(response)
                 await Swal.fire({
                     title: 'Success !',
                     text: response.data.message,
@@ -29,16 +30,12 @@ export const useAuthStore = defineStore('auth', {
                     icon: "success"
                 });
 
-                console.log(response);
-
             } catch (error) {
-                console.error(error);
-
                 await Swal.fire({
                     title: 'Success !',
-                    text: error.data.message,
+                    text: error.response.data.error,
                     timer: 2000,
-                    icon: "success"
+                    icon: "error"
                 });
 
             }
@@ -47,14 +44,24 @@ export const useAuthStore = defineStore('auth', {
 
         async linkLogin(loginLink) {
             try {
-                const response = await axios.get(API_ENDPOINTS.LINK_LOGIN, loginLink);
+                const loginUrl = `${PI_ENDPOINTS.LINK_LOGIN}?token=${loginLink}`;
+
+                const response = await axios.get(loginUrl);
                 this.token = response.data.access_token;
                 localStorage.setItem('token', this.token);
 
                 await router.push('/profile');
 
             } catch (error) {
-                console.error(error);
+                console.error(error.response);
+
+                await Swal.fire({
+                    title: 'Error !',
+                    text: error.response.data.error,
+                    timer: 2000,
+                    icon: "error"
+                });
+
             }
 
         },
