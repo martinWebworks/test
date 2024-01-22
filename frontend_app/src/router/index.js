@@ -1,15 +1,24 @@
 // src/router/index.js
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 import Login from '../views/Login.vue';
 import Profile from '../views/Profile.vue';
 import Activate from '../views/Activate.vue';
-import { useAuthStore } from '../store/authStore';
+import {useAuthStore} from '../store/authStore';
 
 const routes = [
     {
         path: "/login",
-        component: Login
+        component: Login,
+        beforeEnter: (to, from, next) => {
+            const authStore = useAuthStore();
+            if (authStore.isLoggedIn) {
+                next('/profile');
+            } else {
+                next();
+            }
+        }
     },
+
     {
         path: "/link-login",
         component: Activate,
@@ -17,7 +26,11 @@ const routes = [
     {
         path: "/profile",
         component: Profile,
-        meta: { requiresAuth: true },
+        meta: {requiresAuth: true},
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        redirect: "/login",
     },
 ];
 
@@ -28,10 +41,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const authStore = useAuthStore();
-
-    // Exclude the link-login route from redirection logic
     if (to.path !== '/link-login' && to.matched.some(record => record.meta.requiresAuth) && !authStore.isLoggedIn) {
-        next({ path: '/login' });
+        next({path: '/login'});
     } else {
         next();
     }

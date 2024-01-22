@@ -58,7 +58,6 @@ export default {
 
       await useAuthStore().linkLogin(loginLink);
 
-      await router.push('/profile');
     } catch (error) {
       console.error(error);
       this.error = 'An error occurred during login.';
