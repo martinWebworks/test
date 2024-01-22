@@ -29,7 +29,7 @@
 
             <button type="submit"
                     class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-              Login to your account
+              Get Login Link
             </button>
 
 
@@ -46,15 +46,18 @@ import FooterComponent from "../components/Footer.vue";
 
 
 import logoImg from '../assets/img/logo.svg'
-import {useAuthStore} from "../store/authStore.js";
+import {useAuthStore} from "../store/authStore";
 import {ref} from "vue";
 import {useVuelidate} from '@vuelidate/core'
 import {required, email} from '@vuelidate/validators'
+
 
 export default {
 
 
   setup() {
+
+
     const authStore = useAuthStore();
 
     const email = ref('');
@@ -70,7 +73,7 @@ export default {
       v$.value.$touch();
       if (!v$.value.$invalid) {
         try {
-          await authStore.login({email: email.value});
+          await authStore.login(email.value);
 
         } catch (error) {
           console.error(error);
@@ -78,10 +81,11 @@ export default {
       }
     };
 
+
     return {
       email,
       login,
-      v$
+      v$,
     };
 
 

@@ -9,16 +9,27 @@ export const useAuthStore = defineStore('auth', {
     state: () => ({
         user: null,
         token: localStorage.getItem('token') || null,
+        emailedLoginLink: null,
     }),
     getters: {
         isLoggedIn: (state) => !!state.token,
+        getEmailedLoginLink: (state) => state.emailedLoginLink,
+
     },
     actions: {
         async login(email) {
-            try {
-                const response = await axios.post(API_ENDPOINTS.LOGIN, {email});
 
-                console.log(response);
+            try {
+                const response = await axios.post(API_ENDPOINTS.LOGIN, {email: email}, {
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                });
+
+                this.emailedLoginLink = response.data.login_link;
+                localStorage.setItem('emailedLink', this.emailedLoginLink);
+                console.log(this.emailedLoginLink);
+
 
                 await Swal.fire({
                     title: 'Success !',
